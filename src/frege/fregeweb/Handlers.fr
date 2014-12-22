@@ -1,0 +1,46 @@
+module fregeweb.Handlers where
+
+import Data.List
+
+-- TODO: Implement a HashMap
+data StringMap = native fregeweb.ImmutableHashMap where
+  pure native create fregeweb.ImmutableHashMap.create :: String -> StringMap
+  pure native assoc :: StringMap -> String -> String -> StringMap
+  pure native valAt :: StringMap -> String -> String -> String
+
+  fromKVList :: [(String, String)] -> StringMap
+  fromKVList xs = loop xs newMap where
+    newMap = StringMap.create ""
+    loop ((k,v):xs) map = loop xs $ StringMap.assoc map k v
+    loop [] map = map
+
+
+type StatusCode = Int
+type Uri = String
+type ResponseBody = String
+type RequestParams = StringMap
+type Headers = StringMap
+
+data Request = Request {
+  uri :: Uri,
+  params :: RequestParams
+}
+
+
+data Response = Response {
+  body :: ResponseBody,
+  headers :: Headers,
+  status :: StatusCode
+}
+
+
+make_request uri = Request uri params where
+  params = StringMap.create ""
+
+
+
+index :: Request -> Response
+index req = Response body headers status where
+  body = ("Hello from " ++ req.uri)
+  headers = StringMap.fromKVList [("Content-Type", "text/html")]
+  status = 200
