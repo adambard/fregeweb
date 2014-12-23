@@ -1,16 +1,19 @@
 package fregeweb;
 
 import java.util.Iterator;
+import java.util.Map;
+
 import clojure.lang.IMapEntry;
 import clojure.lang.PersistentHashMap;
 import clojure.lang.IPersistentCollection;
 import clojure.lang.IPersistentMap;
+import clojure.lang.APersistentMap;
 import clojure.lang.ISeq;
 
 
 /** A polite and pure hash map delegating to Clojure's PersistentHashMap, for
  use with Frege */
-public class ImmutableHashMap implements IPersistentMap {
+public class ImmutableHashMap extends APersistentMap {
   private final IPersistentMap delegate;
 
   // Frege-friendly constructors
@@ -71,5 +74,4 @@ public class ImmutableHashMap implements IPersistentMap {
   //// Seqable
 
   public ISeq seq(){ return this.delegate.seq(); }
-
 }
