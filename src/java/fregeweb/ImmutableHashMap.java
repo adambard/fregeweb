@@ -22,7 +22,7 @@ public class ImmutableHashMap extends APersistentMap {
     this.delegate = delegate;
   }
 
-  public static ImmutableHashMap create(Object emptyVal){
+  public static ImmutableHashMap create(){
     return new ImmutableHashMap(PersistentHashMap.EMPTY);
   }
 

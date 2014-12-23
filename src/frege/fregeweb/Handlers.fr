@@ -4,13 +4,13 @@ import Data.List
 
 -- TODO: Implement a HashMap
 data StringMap = native fregeweb.ImmutableHashMap where
-  pure native create fregeweb.ImmutableHashMap.create :: String -> StringMap
+  pure native create fregeweb.ImmutableHashMap.create :: () -> StringMap
   pure native assoc :: StringMap -> String -> String -> StringMap
   pure native stringAt :: StringMap -> String -> String -> String
 
   fromKVList :: [(String, String)] -> StringMap
   fromKVList xs = loop xs newMap where
-    newMap = StringMap.create ""
+    newMap = StringMap.create ()
     loop ((k,v):xs) map = loop xs $ StringMap.assoc map k v
     loop [] map = map
 
