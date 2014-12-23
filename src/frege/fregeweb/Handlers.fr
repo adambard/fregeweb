@@ -6,7 +6,7 @@ import Data.List
 data StringMap = native fregeweb.ImmutableHashMap where
   pure native create fregeweb.ImmutableHashMap.create :: String -> StringMap
   pure native assoc :: StringMap -> String -> String -> StringMap
-  pure native valAt :: StringMap -> String -> String -> String
+  pure native stringAt :: StringMap -> String -> String -> String
 
   fromKVList :: [(String, String)] -> StringMap
   fromKVList xs = loop xs newMap where
@@ -34,13 +34,12 @@ data Response = Response {
 }
 
 
-make_request uri = Request uri params where
-  params = StringMap.create ""
-
+make_request uri params = Request uri params
 
 
 index :: Request -> Response
 index req = Response body headers status where
-  body = ("Hello from " ++ req.uri)
+  body = ("Hello " ++ name ++ " from " ++ req.uri)
+  name = StringMap.stringAt req.params "name" "World"
   headers = StringMap.fromKVList [("Content-Type", "text/html")]
   status = 200

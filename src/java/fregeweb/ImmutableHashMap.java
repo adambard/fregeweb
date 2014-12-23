@@ -39,6 +39,10 @@ public class ImmutableHashMap implements IPersistentMap {
     return new ImmutableHashMap(this.delegate.without(key));
   }
 
+  public String stringAt(Object key, String defaultVal){
+    return this.valAt(key, defaultVal).toString();
+  }
+
   public Object valAt(Object key, Object defaultVal){
     Object val = this.valAt(key);
     if(val == null){

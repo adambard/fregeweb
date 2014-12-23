@@ -2,7 +2,9 @@
   (:require [compojure.core :refer [defroutes GET POST]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [org.httpkit.server :refer [run-server]])
-  (:import [fregeweb Handlers Handlers$TRequest Handlers$TResponse])
+  (:import [fregeweb Handlers Handlers$TRequest Handlers$TResponse ImmutableHashMap]
+           
+           )
   )
 
 
@@ -16,8 +18,8 @@
 
 (defn response-to-map [resp]
   {:body (Handlers$TResponse/body resp)
-   :status (Handlers$TRequest/status resp)
-   :headers {}
+   :status (Handlers$TResponse/status resp)
+   :headers (Handlers$TResponse/headers resp)
    }
   )
 
@@ -32,8 +34,9 @@
   (require '[clojure.reflect :as r])
   (require '[clojure.pprint :refer [pprint]])
   (import fregeweb.Handlers$TResponse)
-  (let [req (Handlers/make_request "hi")
+  (let [req (Handlers/make_request "hi" (ImmutableHashMap/create "")
+                                               "name" "Frank" )
         resp (Handlers/index req)]
-    (get (Handlers$TResponse/headers resp) "hey")
+    (response-to-map resp)
     )
   )
