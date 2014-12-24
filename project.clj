@@ -9,7 +9,6 @@
                  [http-kit "2.1.16"]
                  [ring/ring-defaults "0.1.1"]]
   :plugins [[lein-fregec "0.1.0-SNAPSHOT"]]
-  :java-source-paths ["src/java"]
   :frege-source-paths ["src/frege"]
   :source-paths ["src/clj"]
   )

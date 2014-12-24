@@ -1,25 +1,23 @@
 module fregeweb.Handlers where
 
-import Data.List
 
--- TODO: Implement a HashMap
-data StringMap = native fregeweb.ImmutableHashMap where
-  pure native create fregeweb.ImmutableHashMap.create :: () -> StringMap
-  pure native assoc :: StringMap -> String -> String -> StringMap
-  pure native stringAt :: StringMap -> String -> String -> String
+data PersistentMap k v = native clojure.lang.IPersistentMap where
+  pure native empty clojure.lang.PersistentHashMap.EMPTY :: PersistentMap k v
+  pure native assoc :: PersistentMap k v -> k -> v -> PersistentMap k v
+  pure native valAt :: PersistentMap k v -> k -> v -> v
 
-  fromKVList :: [(String, String)] -> StringMap
+  fromKVList :: [(k, v)] -> PersistentMap k v
   fromKVList xs = loop xs newMap where
-    newMap = StringMap.create ()
-    loop ((k,v):xs) map = loop xs $ StringMap.assoc map k v
+    newMap = PersistentMap.empty
+    loop ((k,v):xs) map = loop xs $ PersistentMap.assoc map k v
     loop [] map = map
 
 
 type StatusCode = Int
 type Uri = String
 type ResponseBody = String
-type RequestParams = StringMap
-type Headers = StringMap
+type RequestParams = PersistentMap String String
+type Headers = PersistentMap String String
 
 data Request = Request {
   uri :: Uri,
@@ -34,12 +32,13 @@ data Response = Response {
 }
 
 
+make_request :: String -> PersistentMap String String -> Request
 make_request uri params = Request uri params
 
 
 index :: Request -> Response
 index req = Response body headers status where
   body = ("Hello " ++ name ++ " from " ++ req.uri)
-  name = StringMap.stringAt req.params "name" "World"
-  headers = StringMap.fromKVList [("Content-Type", "text/html")]
+  name = PersistentMap.valAt req.params "name" "World"
+  headers = PersistentMap.fromKVList [("Content-Type", "text/html")]
   status = 200

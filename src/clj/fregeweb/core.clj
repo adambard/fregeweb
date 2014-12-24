@@ -3,15 +3,14 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [org.httpkit.server :refer [run-server]])
   (:import [fregeweb Handlers
-                     Handlers$TResponse
-                     ImmutableHashMap]))
+                     Handlers$TResponse ]))
 
 ; Frege helper stuff
 
 (defn map-to-request [req]
   (Handlers/make_request
     (:uri req)
-    (ImmutableHashMap. (:params req))))
+    (:params req)))
 
 (defn response-to-map [resp]
   {:body (Handlers$TResponse/body resp)
@@ -53,8 +52,7 @@
   (require '[clojure.reflect :as r])
   (require '[clojure.pprint :refer [pprint]])
   (import fregeweb.Handlers$TResponse)
-  (let [req (Handlers/make_request "hi" (assoc (ImmutableHashMap/create "")
-                                               "name" "Frank") )
+  (let [req (Handlers/make_request "hi" {"name" "Frank"} )
         handlerFn #(Handlers/index %)
         resp (handlerFn req)]
     (response-to-map resp)
