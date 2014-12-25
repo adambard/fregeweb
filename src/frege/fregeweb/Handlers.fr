@@ -7,11 +7,7 @@ data PersistentMap k v = native clojure.lang.IPersistentMap where
   pure native valAt :: PersistentMap k v -> k -> v -> v
 
   fromKVList :: [(k, v)] -> PersistentMap k v
-  fromKVList xs = loop xs newMap where
-    newMap = PersistentMap.empty
-    loop ((k,v):xs) map = loop xs $ PersistentMap.assoc map k v
-    loop [] map = map
-
+  fromKVList xs = foldl (\m \(k, v) -> PersistentMap.assoc m k v) PersistentMap.empty xs
 
 type StatusCode = Int
 type Uri = String
